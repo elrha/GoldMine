@@ -1,0 +1,1 @@
+D:\Source\Games\GoldMines\Player\Template_JS\Template_JS.jsproj;x64

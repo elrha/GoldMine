@@ -1,0 +1,14 @@
+D:\Source\Games\GoldMines\bin\x64\Release\Player\Template_JS.js
+D:\Source\Games\GoldMines\bin\x64\Release\Player\resources.pri
+D:\Source\Games\GoldMines\bin\x64\Release\Player\AppxManifest.xml
+D:\Source\Games\GoldMines\bin\x64\Release\Player\Template_JS.build.appxrecipe
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\priconfig.xml.intermediate
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\layout.resfiles.intermediate
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\resources.resfiles.intermediate
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\pri.resfiles.intermediate
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\priconfig.xml
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\layout.resfiles
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\resources.resfiles
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\pri.resfiles
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\LanguageQualifiers.txt
+D:\Source\Games\GoldMines\Player\Template_JS\bld\x64\Release\ProjectArchitectures.txt

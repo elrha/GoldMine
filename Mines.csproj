@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BCB6730F-08A4-4A46-958B-CB32EFA4EA0A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mines</RootNamespace>
+    <AssemblyName>Mines</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>Packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\MainControl.cs" />
+    <Compile Include="Controls\PlayerComboBoxItem.cs" />
+    <Compile Include="Controls\PlayerControl.cs" />
+    <Compile Include="Helper\ImageHelper.cs" />
+    <Compile Include="Helper\MapHelper.cs" />
+    <Compile Include="Helper\TickHelper.cs" />
+    <Compile Include="Log\Log.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Manager\GameManager\GameContext.cs" />
+    <Compile Include="Manager\GameManager\GameManager.cs" />
+    <Compile Include="Defines\Config.cs" />
+    <Compile Include="Manager\GameManager\TurnAction.cs" />
+    <Compile Include="Manager\PlayerManager\AssemblyLoader.cs" />
+    <Compile Include="Manager\LogManager\LogManager.cs" />
+    <Compile Include="Manager\PlayerManager\IAssemblyGenerator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderer\MainRenderer.cs" />
+    <Compile Include="Renderer\PlayerRenderer.cs" />
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\flag.png" />
+    <None Include="Resources\stone.png" />
+    <None Include="Resources\hourglass.png" />
+    <None Include="Resources\clock.png" />
+    <None Include="Resources\clock.jpg" />
+    <None Include="Resources\tool.png" />
+    <None Include="Resources\player_run1.png" />
+    <None Include="Resources\player_work4.png" />
+    <None Include="Resources\player_work3.png" />
+    <None Include="Resources\player_work2.png" />
+    <None Include="Resources\player_work1.png" />
+    <None Include="Resources\player_run2.png" />
+    <None Include="Resources\Error.png" />
+    <None Include="Resources\rock2.png" />
+    <None Include="Resources\rock1.png" />
+    <None Include="Resources\rock_back.png" />
+    <None Include="Resources\rock6.png" />
+    <None Include="Resources\rock5.png" />
+    <None Include="Resources\rock4.png" />
+    <None Include="Resources\rock3.png" />
+    <None Include="Resources\gem3.png" />
+    <None Include="Resources\gem2.png" />
+    <None Include="Resources\gem1.png" />
+    <None Include="Resources\gem5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Player\IPlayer\IPlayer.csproj">
+      <Project>{3c9582ec-0556-4df6-abdc-579ff4d22062}</Project>
+      <Name>IPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="Player\JSPlayer\IJSPlayer.csproj">
+      <Project>{84854fec-1e5b-45f3-8a6d-90a4b6b6bbcc}</Project>
+      <Name>IJSPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="Player\NativePlayer\Template_Native_Loader.csproj">
+      <Project>{38b1ba5e-2143-4e2e-92ed-20e53f17a75f}</Project>
+      <Name>Template_Native_Loader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

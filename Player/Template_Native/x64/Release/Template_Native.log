@@ -1,0 +1,20 @@
+﻿Build started 2016-01-27 오전 9:13:56.
+     1>Project "D:\Source\Games\GoldMines\Player\Template_Native\Template_Native.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D TEMPLATE_NATIVE_CORE_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"x64\Release\Template_Native.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt Template_Native.cpp
+         Template_Native.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Source\Games\GoldMines\\bin\x64\Release\Player\Template_Native.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Release\Template_Native.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\Source\Games\GoldMines\bin\x64\Release\Player\Template_Native.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Source\Games\GoldMines\\bin\x64\Release\Player\Template_Native.lib" /MACHINE:X64 /DLL x64\Release\dllmain.obj
+         x64\Release\stdafx.obj
+         x64\Release\Template_Native.obj
+            Creating library D:\Source\Games\GoldMines\\bin\x64\Release\Player\Template_Native.lib and object D:\Source\Games\GoldMines\\bin\x64\Release\Player\Template_Native.exp
+         Generating code
+         Finished generating code
+         Template_Native.vcxproj -> D:\Source\Games\GoldMines\\bin\x64\Release\Player\Template_Native.dll
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\Source\Games\GoldMines\\bin\x64\Release\Player\Template_Native.dll;#2" /manifest x64\Release\Template_Native.dll.intermediate.manifest
+     1>Done Building Project "D:\Source\Games\GoldMines\Player\Template_Native\Template_Native.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.70
