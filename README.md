@@ -119,43 +119,24 @@ JS 경우는, 작성하신 Template_JS.js를 그대로 보내 주시면 됩니�
 전 코드 공통으로, Map Field 값의 의미는 아래와 같습니다.
 
 ITEM_9 = -1009
-
 ITEM_8 = -1008
-
 ITEM_7 = -1007
-
 ITEM_6 = -1006
-
 ITEM_5 = -1005
-
 ITEM_4 = -1004
-
 ITEM_3 = -1003
-
 ITEM_2 = -1002
-
 ITEM_1 = -1001
-
 GEM_5 = -5
-
 GEM_3 = -3
-
 GEM_2 = -2
-
 GEM_1 = -1
-
 NONE = 0
-
 ROCK_1 = 1
-
 ROCK_2 = 2
-
 ROCK_3 = 3
-
 ROCK_4 = 4
-
 ROCK_5 = 5
-
 ROCK_6 = 6
 
 ####Return Code From Player
