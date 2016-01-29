@@ -12,10 +12,10 @@ namespace NativePlayer
 {
     public class Template_Native_Loader : IPlayer
     {
-        [DllImport("NormalPlayer.dll")]
+        [DllImport("Template_Native.dll")]
         private static extern void InnerInitialize(int myNumber, int totalPlayerCount, int col, int row);
 
-        [DllImport("NormalPlayer.dll")]
+        [DllImport("Template_Native.dll")]
         private static extern int InnerProcess(int myNumber, int[] playerPosition, int[] playerPower, int[] playerStun, int[] mapBlocks);
 
         private int myNumber;
@@ -26,7 +26,7 @@ namespace NativePlayer
 
         public string GetName()
         {
-            return "NormalPlayer";
+            return "NativePlayer";
         }
 
         public void Initialize(int myNumber, int totalPlayerCount, int col, int row)
