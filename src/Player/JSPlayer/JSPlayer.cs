@@ -42,7 +42,7 @@ namespace JSPlayer
         {
             try
             {
-                return (Arrow)engin.Script.Process(gameInfo.PlayerPosition, gameInfo.PlayerPower, gameInfo.PlayerStun, mineField);
+                return (Arrow)engin.Script.Process(gameInfo.PlayerPosition.ToArray(), gameInfo.PlayerPower.ToArray(), gameInfo.PlayerStun.ToArray(), mineField.Select(item => (int)item).ToArray());
             }
             catch (Exception e)
             {

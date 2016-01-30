@@ -49,6 +49,10 @@ var Process = function (playerPosition, playerPower, playerStun, mapBlocks) {
     Console.Info(playerPower);
     Console.Info(playerStun);
     Console.Info(mapBlocks);
+    Console.Info(mapBlocks[0]);
+    Console.Info(mapBlocks[1]);
+    Console.Info(mapBlocks[2]);
+    Console.Info(mapBlocks[3]);
 
     return test++ % 4;
 }
