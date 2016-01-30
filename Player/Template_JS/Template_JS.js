@@ -11,6 +11,10 @@ var GetName = function () {
 // note : row : Map 높이
 // note : 본 함수는 시작과 함께 1회만 호출 됩니다.
 var Initialize = function (myNumber, totalPlayerCount, col, row) {
+    Console.Info(myNumber);
+    Console.Info(totalPlayerCount);
+    Console.Info(col);
+    Console.Info(row);
 }
 
 // note : 게임 중 내내 호출 될 function 입니다.
@@ -41,7 +45,10 @@ var Initialize = function (myNumber, totalPlayerCount, col, row) {
 var Process = function (playerPosition, playerPower, playerStun, mapBlocks) {
     // note : Breakpoint 잡고 실시간 디버깅이 가능하도록 환경을 제공 하고 싶었으나,
     //      JS Engin 디버깅 환경 설정이 좀 번거롭네요. 아래 코드로 Log/Mines.log 파일에 로그를 남길 수 있습니다.
-    Console.Info(test);
+    Console.Info(playerPosition);
+    Console.Info(playerPower);
+    Console.Info(playerStun);
+    Console.Info(mapBlocks);
 
     return test++ % 4;
 }

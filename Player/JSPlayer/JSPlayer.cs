@@ -35,14 +35,14 @@ namespace JSPlayer
 
         public void Initialize(int myNumber, int totalPlayerCount, int col, int row)
         {
-            engin.Script.Initialize(myNumber, col, row);
+            engin.Script.Initialize(myNumber, totalPlayerCount, col, row);
         }
 
         public Arrow Process(GameInfo gameInfo, BlockType[] mineField)
         {
             try
             {
-                return (Arrow)engin.Script.Process(gameInfo.PlayerPosition.Count(), gameInfo.PlayerPosition, mineField);
+                return (Arrow)engin.Script.Process(gameInfo.PlayerPosition, gameInfo.PlayerPower, gameInfo.PlayerStun, mineField);
             }
             catch (Exception e)
             {
