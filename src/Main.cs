@@ -24,7 +24,7 @@ namespace Mines
         {
             InitializeComponent();
 
-            Config.Initialize(20, 16);
+            Config.Initialize(24, 20);
 
             var playerControls = new List<PlayerControl>();
             for (int i = 0; i < Config.PlayerCount; i++)
