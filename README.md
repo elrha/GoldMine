@@ -1,4 +1,8 @@
-게임 규칙
+**알고리즘 대회 개요**
+
+![](https://github.com/elrha/GoldMine/blob/master/doc/poster_02.jpg?raw=true)
+
+**게임 규칙**
 
 -   본 게임은 턴 방식입니다.
 
