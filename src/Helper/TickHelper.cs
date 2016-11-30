@@ -35,7 +35,7 @@ namespace Mines.Helper
         {
             long end;
             QueryPerformanceCounter(out end);
-            var gap = this.waitTime - Convert.ToInt32(((double)(end - this.start)) / this.freq);
+            var gap = this.waitTime - Convert.ToInt32((((double)(end - this.start)) / this.freq) * 1000);
             if (gap > 0) Thread.Sleep(gap);
         }
     }
