@@ -14,6 +14,7 @@ namespace Mines.Controls
     class MainControl
     {
         private PictureBox MainCanvas;
+        private Graphics MainGraphics;
         private ComboBox MapSelector;
         private Button StartButton;
 
@@ -25,6 +26,8 @@ namespace Mines.Controls
             this.MainCanvas.Location = new Point(0, mainCanvasTop);
             this.MainCanvas.Size = new Size(mainForm.ClientSize.Width, mainForm.ClientSize.Height - (mainCanvasTop + Config.StartButtonHeight));
             mainForm.Controls.Add(this.MainCanvas);
+
+            this.MainGraphics = this.MainCanvas.CreateGraphics();
 
             this.MapSelector = new ComboBox();
             this.MapSelector.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -45,7 +48,10 @@ namespace Mines.Controls
         {
             var mainCanvasTop = Convert.ToInt32(clientSize.Height * Config.PlayerControlRatio);
             this.MainCanvas.SetBounds(0, mainCanvasTop, clientSize.Width, clientSize.Height - (mainCanvasTop + Config.StartButtonHeight));
-            
+
+            this.MainGraphics.Dispose();
+            this.MainGraphics = this.MainCanvas.CreateGraphics();
+
             this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, clientSize.Width / 5, Config.StartButtonHeight);
             this.StartButton.SetBounds(clientSize.Width / 5, this.MainCanvas.Bottom, (clientSize.Width / 5) * 4, Config.StartButtonHeight);
         }
@@ -55,8 +61,7 @@ namespace Mines.Controls
             this.MainCanvas.BeginInvoke(new Action(() =>
             {
                 lock(image)
-                    using (var mainCanvasGraphics = this.MainCanvas.CreateGraphics())
-                        mainCanvasGraphics.DrawImage(image, 0, 0, this.MainCanvas.Width, this.MainCanvas.Height);
+                    this.MainGraphics.DrawImage(image, 0, 0, this.MainCanvas.Width, this.MainCanvas.Height);
             }));
         }
     }

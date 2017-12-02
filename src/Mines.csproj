@@ -107,14 +107,12 @@
     <Compile Include="Manager\GameManager\GameContext.cs" />
     <Compile Include="Manager\GameManager\GameManager.cs" />
     <Compile Include="Defines\Config.cs" />
-    <Compile Include="Manager\GameManager\TurnAction.cs" />
     <Compile Include="Manager\PlayerManager\AssemblyLoader.cs" />
     <Compile Include="Manager\LogManager\LogManager.cs" />
     <Compile Include="Manager\PlayerManager\IAssemblyGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer\MainRenderer.cs" />
-    <Compile Include="Renderer\PlayerRenderer.cs" />
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

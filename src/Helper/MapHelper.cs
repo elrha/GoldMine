@@ -82,13 +82,25 @@ namespace Mines.Helper
             var ret = new BlockType[totalCount];
             var readyIndex = new HashSet<int>();
             var rand = new Random(DateTime.UtcNow.Millisecond);
-
+            
             for (int i = 0; i < totalCount; i++)
                 ret[i] = BlockType.ROCK_1;
 
             int width = col / 4;
             int height = row / 4;
 
+            var toolArea = new[] { new[] { 0, 1 }, new[] { 0, 2 }, new[] { 1, 0 }, new[] { 1, 3 }, new[] { 2, 0 }, new[] { 2, 3 }, new[] { 3, 1 }, new[] { 3, 2 } };
+
+            foreach (var areaHW in toolArea)
+            {
+                int wStart = width * areaHW[1];
+                int hStart = height * areaHW[0];
+
+                var targetIndex = (rand.Next(height) + hStart) * col + (rand.Next(width) + wStart);
+                ret[targetIndex] = BlockType.ITEM_7;
+                readyIndex.Add(targetIndex);
+            }
+            
             for (int h = 0; h < 4; h++)
             {
                 for (int w = 0; w < 4; w++)

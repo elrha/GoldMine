@@ -14,9 +14,11 @@ namespace Mines.Controls
 {
     class PlayerControl
     {
+        private bool boundUpdated = false;
         private int playerIndex;
         private ComboBox AssemblySelector;
         private PictureBox StateCanvas;
+        private Graphics StateGraphic;
         private Image StateBackImage;
         private Label NameLabel;
 
@@ -46,9 +48,10 @@ namespace Mines.Controls
             this.StateCanvas = new PictureBox();
             this.StateCanvas.BorderStyle = BorderStyle.Fixed3D;
             this.StateCanvas.SetBounds(playerControlWidth * this.playerIndex, AssemblySelector.Height, playerControlWidth / 5, playerControlBottom - AssemblySelector.Height);
+            this.StateGraphic = this.StateCanvas.CreateGraphics();
             this.StateBackImage = new Bitmap(this.StateCanvas.Width, this.StateCanvas.Height);
             mainForm.Controls.Add(this.StateCanvas);
-
+            
             this.NameLabel = new Label();
             this.NameLabel.BorderStyle = BorderStyle.Fixed3D;
             this.NameLabel.SetBounds((playerControlWidth * this.playerIndex) + (playerControlWidth / 5), AssemblySelector.Height, (playerControlWidth / 5) * 4, (playerControlBottom - AssemblySelector.Height) / 3);
@@ -105,6 +108,7 @@ namespace Mines.Controls
             this.AssemblySelector.SetBounds(playerControlWidth * this.playerIndex, 0, playerControlWidth, Convert.ToInt32(playerControlBottom * .1));
             this.StateCanvas.SetBounds(playerControlWidth * this.playerIndex, AssemblySelector.Height, playerControlWidth / 5, playerControlBottom - AssemblySelector.Height);
             this.NameLabel.SetBounds((playerControlWidth * this.playerIndex) + (playerControlWidth / 5), AssemblySelector.Height, (playerControlWidth / 5) * 4, (playerControlBottom - AssemblySelector.Height) / 3);
+            this.boundUpdated = true;
 
             var labelWidth = ((playerControlWidth / 5) * 4) / 3;
             this.ScoreTitleLabel.SetBounds((playerControlWidth * this.playerIndex) + (playerControlWidth / 5), AssemblySelector.Height + this.NameLabel.Height, labelWidth, (playerControlBottom - AssemblySelector.Height) / 3);
@@ -115,18 +119,31 @@ namespace Mines.Controls
             this.StunLabel.SetBounds((playerControlWidth * this.playerIndex) + (playerControlWidth / 5) + labelWidth * 2, AssemblySelector.Height + this.NameLabel.Height * 2, labelWidth, (playerControlBottom - AssemblySelector.Height) / 3);
         }
 
+        public Graphics GetGraphic()
+        {
+            return this.StateGraphic;
+        }
+
         public Image GetBackImage()
         {
             return this.StateBackImage;
         }
-
+        
         public void UpdateStateImage()
         {
             this.StateCanvas.BeginInvoke(new Action(() =>
             {
-                using (var stateCanvasGraphics = this.StateCanvas.CreateGraphics())
-                    lock(this.StateBackImage)
-                        stateCanvasGraphics.DrawImage(this.StateBackImage, 0, 0, this.StateCanvas.Width, this.StateCanvas.Height);
+                lock (this.StateBackImage)
+                {
+                    if (this.boundUpdated)
+                    {
+                        this.boundUpdated = false;
+                        this.StateGraphic.Dispose();
+                        this.StateGraphic = this.StateCanvas.CreateGraphics();
+                    }
+
+                    this.StateGraphic.DrawImage(this.StateBackImage, 0, 0, this.StateCanvas.Width, this.StateCanvas.Height);
+                }
             }));
         }
 

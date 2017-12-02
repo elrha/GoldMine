@@ -28,27 +28,26 @@ namespace Mines.Manager.GameManager
         public void StartGame()
         {
             this.StopGame();
-            
-            var contextContainer = new ContextContainer();
 
-            // note : fill MainContext
             var rand = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
             var startPosition = (new List<int>() { 0, Config.BlockCol - 1, Config.BlockCol * (Config.BlockRow - 1), Config.BlockCol * Config.BlockRow - 1}).OrderBy(item => rand.Next()).ToList();
-            contextContainer.MainContext.IsFinish = false;
-            contextContainer.MainContext.FieldCol = Config.BlockCol;
-            contextContainer.MainContext.FieldRow = Config.BlockRow;
-            contextContainer.MainContext.GameField = MapHelper.CreateField(Config.BlockCol, Config.BlockRow, startPosition);
 
-            // note : fill PlayerContext
-            contextContainer.PlayerCtx.AddRange(renderer.CreatePlayerAsm(Config.BlockCol, Config.BlockRow).Select(item => new PlayerContext()
-            {
-                PlayerAsm = item.Value,
-                Name = item.Value.GetName(), Number = item.Key, Score = 0,
-                Command = Arrow.UP, LastPos = startPosition[item.Key], Power = Config.DefaultPower, Stun = 0
-            }));
-
+            var contextContainer = new ContextContainer() {
+                MainCtx = new MainContext(Config.BlockCol, Config.BlockRow, MapHelper.CreateField(Config.BlockCol, Config.BlockRow, startPosition)),
+                PlayerCtxList = renderer.CreatePlayerAsm(Config.BlockCol, Config.BlockRow).Select(item => new PlayerContext()
+                {
+                    PlayerAsm = item.Value,
+                    Name = item.Value.GetName(),
+                    Number = item.Key,
+                    Score = 0,
+                    Command = Arrow.UP,
+                    LastPos = startPosition[item.Key],
+                    Power = Config.DefaultPower,
+                    Stun = 0
+                }).ToList()
+            };
+            
             this.renderer.Start();
-
             this.playFlag = true;
             this.mainThread = new Thread(GameProc);
             this.mainThread.Start(contextContainer);
@@ -71,15 +70,13 @@ namespace Mines.Manager.GameManager
 
             while (this.playFlag)
             {
-                if (!contextContainer.MainContext.IsFinish)
+                if (!contextContainer.MainCtx.IsFinish())
                 {
-                    this.generateRandomItem(contextContainer);
+                    var orderedCollection = contextContainer.PlayerCtxList.OrderBy(item => item.Number);
+                    var clonedField = contextContainer.MainCtx.CloneGameFields();
 
-                    var orderedCollection = contextContainer.PlayerCtx.OrderBy(item => item.Number);
-                    var clonedField = contextContainer.MainContext.GameField.ToArray();
-
-                    var processTarget = contextContainer.PlayerCtx.Where(item => item.Stun <= 0);
-                    var nonProcessTarget = contextContainer.PlayerCtx.Where(item => item.Stun > 0);
+                    var processTarget = contextContainer.PlayerCtxList.Where(item => item.Stun <= 0);
+                    var nonProcessTarget = contextContainer.PlayerCtxList.Where(item => item.Stun > 0);
                     processTarget.Where(item => item.Stun <= 0).AsParallel().ForAll(item => 
                     { 
                         try 
@@ -87,33 +84,31 @@ namespace Mines.Manager.GameManager
                             item.Command = item.PlayerAsm.Process(new GameInfo() 
                             {
                                 PlayerPosition = orderedCollection.Select(innerItem => innerItem.LastPos).ToArray(),
-                                PlayerPower = contextContainer.PlayerCtx.Select(InnerItem => InnerItem.Power).ToArray(),
-                                PlayerStun = contextContainer.PlayerCtx.Select(InnerItem => InnerItem.Stun).ToArray()
+                                PlayerPower = contextContainer.PlayerCtxList.Select(InnerItem => InnerItem.Power).ToArray(),
+                                PlayerStun = contextContainer.PlayerCtxList.Select(InnerItem => InnerItem.Stun).ToArray()
                             }, clonedField); 
                         } catch { } 
                     });
 
-                    var actions = new List<TurnAction>();
+                    var actions = new List<Action>();
                     var renderContexts = new List<PlayerRenderContext>();
                     foreach(var processPlayerContext in processTarget)
                         this.processCommandTurn(contextContainer, processPlayerContext, renderContexts, actions);
                     foreach (var processPlayerContext in nonProcessTarget)
                         this.processStunTurn(processPlayerContext, renderContexts);
                     foreach (var action in actions)
-                        action.Excute();
+                        action();
                     
                     this.renderer.PushData(
                         new MainRenderContext(
-                            contextContainer.MainContext.GameField.ToArray(),
+                            contextContainer.MainCtx.CloneGameFields(),
                             renderContexts));
-
-                    contextContainer.MainContext.IsFinish = processFinishState(contextContainer.MainContext.GameField);
                 }
                 else
                 {
                     this.renderer.PushData(
                         new MainRenderContext(
-                            contextContainer.MainContext.GameField.ToArray(),
+                            contextContainer.MainCtx.CloneGameFields(),
                             this.processFinishRenderContext(contextContainer)));
                 }
             }
@@ -123,8 +118,8 @@ namespace Mines.Manager.GameManager
         {
             var renderContexts = new List<PlayerRenderContext>();
 
-            var maxScore = contextContainer.PlayerCtx.Max(item => item.Score);
-            foreach (var playerContext in contextContainer.PlayerCtx)
+            var maxScore = contextContainer.PlayerCtxList.Max(item => item.Score);
+            foreach (var playerContext in contextContainer.PlayerCtxList)
             {
                 if (playerContext.Score == maxScore)
                     renderContexts.Add(new PlayerRenderContext(playerContext, Motion.TURN));
@@ -141,7 +136,7 @@ namespace Mines.Manager.GameManager
             renderContexts.Add(new PlayerRenderContext(playerContext, Motion.TURN));
         }
 
-        private void processCommandTurn(ContextContainer contextContainer, PlayerContext playerContext, List<PlayerRenderContext> renderContexts, List<TurnAction> actions)
+        private void processCommandTurn(ContextContainer contextContainer, PlayerContext playerContext, List<PlayerRenderContext> renderContexts, List<Action> actions)
         {
             switch (playerContext.Command)
             {
@@ -172,14 +167,14 @@ namespace Mines.Manager.GameManager
             }
         }
 
-        private PlayerRenderContext processRenderContext(ContextContainer contextContainer, int playerIndex, List<TurnAction> actions, int targetPos, Motion motion)
+        private PlayerRenderContext processRenderContext(ContextContainer contextContainer, int playerIndex, List<Action> actions, int targetPos, Motion motion)
         {
-            var targetFieldValue = (int)contextContainer.MainContext.GameField[targetPos];
-            var targetPlayerContext = contextContainer.PlayerCtx[playerIndex];
+            var targetFieldValue = (int)contextContainer.MainCtx.GetFieldType(targetPos);
+            var targetPlayerContext = contextContainer.PlayerCtxList[playerIndex];
 
             if (targetFieldValue > 0)
             {
-                actions.Add(new DigAction(contextContainer, targetPos, -1 * targetPlayerContext.Power));
+                actions.Add(contextContainer.GetDigAction(targetPos, -1 * targetPlayerContext.Power));
                 return new PlayerRenderContext(targetPlayerContext, (int)motion + Motion.DIG_UP);
             }
             else
@@ -198,63 +193,40 @@ namespace Mines.Manager.GameManager
                             targetPlayerContext.Power += 1;
                             break;
                         case (int)BlockType.ITEM_6:
-                            foreach (var otherPlayerContext in contextContainer.PlayerCtx.Where(item => item.Number != playerIndex))
+                            foreach (var otherPlayerContext in contextContainer.PlayerCtxList.Where(item => item.Number != playerIndex))
                                 otherPlayerContext.Stun += Config.StunTurnLV3;
                             break;
                         case (int)BlockType.ITEM_5:
-                            foreach (var otherPlayerContext in contextContainer.PlayerCtx.Where(item => item.Number != playerIndex))
+                            foreach (var otherPlayerContext in contextContainer.PlayerCtxList.Where(item => item.Number != playerIndex))
                                 otherPlayerContext.Stun += Config.StunTurnLV2;
                             break;
                         case (int)BlockType.ITEM_4:
-                            foreach (var otherPlayerContext in contextContainer.PlayerCtx.Where(item => item.Number != playerIndex))
+                            foreach (var otherPlayerContext in contextContainer.PlayerCtxList.Where(item => item.Number != playerIndex))
                                 otherPlayerContext.Stun += Config.StunTurnLV1;
                             break;
                         case (int)BlockType.ITEM_3:
-                            actions.Add(new LandSlideAction(contextContainer, playerIndex, 5));
+                            actions.Add(contextContainer.GetLandFillAction(playerIndex, 5));
                             break;
                         case (int)BlockType.ITEM_2:
-                            actions.Add(new LandSlideAction(contextContainer, playerIndex, 3));
+                            actions.Add(contextContainer.GetLandFillAction(playerIndex, 3));
                             break;
                         case (int)BlockType.ITEM_1:
-                            actions.Add(new LandSlideAction(contextContainer, playerIndex, 2));
+                            actions.Add(contextContainer.GetLandFillAction(playerIndex, 2));
                             break;
                         default:
                             break;
                     }
 
-                    actions.Add(new ClearAction(contextContainer, targetPos));
+                    actions.Add(contextContainer.GetClearAction(targetPos));
                 }                    
                 else if (targetFieldValue < 0)
                 {
                     targetPlayerContext.Score -= targetFieldValue;
-                    actions.Add(new ClearAction(contextContainer, targetPos));
+                    actions.Add(contextContainer.GetClearAction(targetPos));
                 }
 
                 targetPlayerContext.LastPos = targetPos;
                 return new PlayerRenderContext(targetPlayerContext, motion);
-            }
-        }
-
-        private bool processFinishState(BlockType[] fields)
-        {
-            foreach (var field in fields)
-                if (field == BlockType.GEM_5 || field == BlockType.GEM_3 || field == BlockType.GEM_2 || field == BlockType.GEM_1)
-                    return false;
-            return true;
-        }
-
-        private void generateRandomItem(ContextContainer contextContainer)
-        {
-            var rand = new Random(DateTime.UtcNow.Millisecond);
-
-            if (rand.Next() % 30 == 7)
-            {
-                var itemNumber = rand.Next((int)BlockType.ITEM_9, (int)BlockType.ITEM_1 + 1);
-                var index = rand.Next(contextContainer.MainContext.GameField.Length);
-
-                if (contextContainer.PlayerCtx.Where(item => item.LastPos == index).Count() <= 0)
-                    if (contextContainer.MainContext.GameField[index] == BlockType.NONE)
-                        contextContainer.MainContext.GameField[index] = (BlockType)itemNumber;
             }
         }
     }

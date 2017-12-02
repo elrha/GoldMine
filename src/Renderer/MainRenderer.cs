@@ -32,7 +32,9 @@ namespace Mines.Renderer
         private Thread renderThread;
 
         private Image backGroundImage;
+        private Graphics backGroundGraphics;
         private Image animateImage;
+        private Graphics animateGraphics;
         
         public MainRenderer(Form mainForm, MainControl mainControl, List<PlayerControl> playerControlList)
         {
@@ -47,7 +49,9 @@ namespace Mines.Renderer
             this.innerEvent = new AutoResetEvent(false);
 
             this.backGroundImage = new Bitmap(Config.BlockCol * Config.BlockPixelSize, Config.BlockRow * Config.BlockPixelSize);
+            this.backGroundGraphics = Graphics.FromImage(this.backGroundImage);
             this.animateImage = new Bitmap(Config.BlockCol * Config.BlockPixelSize, Config.BlockRow * Config.BlockPixelSize);
+            this.animateGraphics = Graphics.FromImage(this.animateImage);
 
             mainForm.Resize += this.Resize;
         }
@@ -123,20 +127,17 @@ namespace Mines.Renderer
 
         public void UpdateBackGround(BlockType[] gameField)
         {
-            using (var backGroundImageGraphics = Graphics.FromImage(this.backGroundImage))
+            for (int h = 0; h < Config.BlockRow; h++)
             {
-                for (int h = 0; h < Config.BlockRow; h++)
+                for (int w = 0; w < Config.BlockCol; w++)
                 {
-                    for (int w = 0; w < Config.BlockCol; w++)
-                    {
-                        var targetFieldType = (int)gameField[h * Config.BlockCol + w];
-                        if (targetFieldType <= (int)BlockType.ITEM_1)
-                            targetFieldType -= (int)BlockType.ITEM_9;
-                        else
-                            targetFieldType -= ((int)BlockType.GEM_5 - 9);
+                    var targetFieldType = (int)gameField[h * Config.BlockCol + w];
+                    if (targetFieldType <= (int)BlockType.ITEM_1)
+                        targetFieldType -= (int)BlockType.ITEM_9;
+                    else
+                        targetFieldType -= ((int)BlockType.GEM_5 - 9);
 
-                        backGroundImageGraphics.DrawImage(blockImages[targetFieldType], w * Config.BlockPixelSize, h * Config.BlockPixelSize, Config.BlockPixelSize, Config.BlockPixelSize);
-                    }
+                    this.backGroundGraphics.DrawImage(blockImages[targetFieldType], w * Config.BlockPixelSize, h * Config.BlockPixelSize, Config.BlockPixelSize, Config.BlockPixelSize);
                 }
             }
         }
@@ -144,8 +145,7 @@ namespace Mines.Renderer
         public void UpdateAnimate(int frameNumber, BlockType[] gameField, List<PlayerRenderContext> playerContext)
         {
             lock (this.animateImage)
-                using (var animateImageGraphics = Graphics.FromImage(this.animateImage))
-                    animateImageGraphics.DrawImage(this.backGroundImage, 0, 0, this.animateImage.Width, this.animateImage.Height);
+                this.animateGraphics.DrawImage(this.backGroundImage, 0, 0, this.animateImage.Width, this.animateImage.Height);
 
             foreach (var pc in playerContext)
             {
@@ -202,11 +202,10 @@ namespace Mines.Renderer
                 }
 
                 lock (this.animateImage)
-                    using (var animateImageGraphics = Graphics.FromImage(this.animateImage))
-                        animateImageGraphics.DrawImage(
-                            this.playerImages[pc.Number][motionIndex][animateIndex],
-                            x, y, Config.BlockPixelSize, Config.BlockPixelSize);
-
+                    this.animateGraphics.DrawImage(
+                        this.playerImages[pc.Number][motionIndex][animateIndex],
+                        x, y, Config.BlockPixelSize, Config.BlockPixelSize);
+                
                 var image = this.playerControlList[pc.Number].GetBackImage();
                 lock (image)
                 {
