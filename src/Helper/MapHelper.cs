@@ -11,18 +11,6 @@ namespace Mines.Helper
 {
     class MapHelper
     {
-        //GEM_5 = -5,
-        //GEM_3 = -3,
-        //GEM_2 = -2,
-        //GEM_1 = -1,
-        //NONE = 0,
-        //ROCK_1 = 1,
-        //ROCK_2 = 2,
-        //ROCK_3 = 3,
-        //ROCK_4 = 4,
-        //ROCK_5 = 5,
-        //ROCK_6 = 6
-
         private static Random mapIndexGenerator = new Random(DateTime.Now.Second);
         private static int selectedMapIndex = 0;
 
@@ -193,8 +181,8 @@ namespace Mines.Helper
             {
                 for (int h = hCurrent; h < row - hCurrent; h++)
                 {
-                    ret[h * col + wCurrent] = BlockType.ROCK_6;
-                    ret[h * col + (col - (wCurrent + 1))] = BlockType.ROCK_6;
+                    ret[h * col + wCurrent] = BlockType.ROCK_12;
+                    ret[h * col + (col - (wCurrent + 1))] = BlockType.ROCK_12;
                     readyIndex.Add(h * col + wCurrent);
                     readyIndex.Add(h * col + (col - (wCurrent + 1)));
                 }
@@ -203,8 +191,8 @@ namespace Mines.Helper
 
                 for (int w = wCurrent; w < col - wCurrent; w++)
                 {
-                    ret[hCurrent * col + w] = BlockType.ROCK_6;
-                    ret[(row - (hCurrent + 1)) * col + w] = BlockType.ROCK_6;
+                    ret[hCurrent * col + w] = BlockType.ROCK_12;
+                    ret[(row - (hCurrent + 1)) * col + w] = BlockType.ROCK_12;
                     readyIndex.Add(hCurrent * col + w);
                     readyIndex.Add((row - (hCurrent + 1)) * col + w);
                 }
@@ -231,6 +219,43 @@ namespace Mines.Helper
 
             int width = col / 4;
             int height = row / 4;
+
+            var tool1Area = new[] { new[] { 0, 1 }, new[] { 0, 2 }, new[] { 3, 1 }, new[] { 3, 2 } };
+            var tool2Area = new[] { new[] { 1, 0 }, new[] { 1, 3 }, new[] { 2, 0 }, new[] { 2, 3 } };
+
+            foreach (var areaHW in tool1Area)
+            {
+                int wStart = width * areaHW[1];
+                int hStart = height * areaHW[0];
+
+                while (true)
+                {
+                    var targetIndex = (rand.Next(height) + hStart) * col + (rand.Next(width) + wStart);
+                    if (!readyIndex.Contains(targetIndex))
+                    {
+                        ret[targetIndex] = BlockType.ITEM_7;
+                        readyIndex.Add(targetIndex);
+                        break;
+                    }
+                }
+            }
+
+            foreach (var areaHW in tool2Area)
+            {
+                int wStart = width * areaHW[1];
+                int hStart = height * areaHW[0];
+
+                while (true)
+                {
+                    var targetIndex = (rand.Next(height) + hStart) * col + (rand.Next(width) + wStart);
+                    if (!readyIndex.Contains(targetIndex))
+                    {
+                        ret[targetIndex] = BlockType.ITEM_8;
+                        readyIndex.Add(targetIndex);
+                        break;
+                    }
+                }
+            }
 
             for (int h = 0; h < 4; h++)
             {
