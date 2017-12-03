@@ -16,11 +16,17 @@ namespace Mines.Controls
         private PictureBox MainCanvas;
         private Graphics MainGraphics;
         private ComboBox MapSelector;
-        private Button StartButton;
-
-        public MainControl(Form mainForm, EventHandler startCallback)
+        private Button PauseButton;
+        private Button NewButton;
+        
+        private Func<bool> pauseAction;
+        private Action newAction;
+        
+        public MainControl(Form mainForm, Func<bool> pauseAction, Action newAction)
         {
             var mainCanvasTop = Convert.ToInt32(mainForm.ClientSize.Height * Config.PlayerControlRatio);
+            this.pauseAction = pauseAction;
+            this.newAction = newAction;
 
             this.MainCanvas = new PictureBox();
             this.MainCanvas.Location = new Point(0, mainCanvasTop);
@@ -29,19 +35,39 @@ namespace Mines.Controls
 
             this.MainGraphics = this.MainCanvas.CreateGraphics();
 
+            var controlUnit = mainForm.ClientSize.Width / 5;
+
             this.MapSelector = new ComboBox();
             this.MapSelector.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, mainForm.ClientSize.Width / 5, Config.StartButtonHeight);
+            this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, controlUnit, Config.StartButtonHeight);
             for(int i = 0; i < MapHelper.GetMapCount(); i++) this.MapSelector.Items.Add(i);
             if (this.MapSelector.Items.Count > 0) this.MapSelector.SelectedIndex = 0;
             mainForm.Controls.Add(this.MapSelector);
             this.MapSelector.SelectedIndexChanged += (object sender, EventArgs e) => { MapHelper.SelectMap(this.MapSelector.SelectedIndex); };
+            
+            this.PauseButton = new Button();
+            this.PauseButton.Text = "Pause";
+            this.PauseButton.SetBounds(controlUnit, this.MainCanvas.Bottom, controlUnit * 2, Config.StartButtonHeight);
+            this.PauseButton.Click += PauseBtnClicked;
+            mainForm.Controls.Add(this.PauseButton);
 
-            this.StartButton = new Button();
-            this.StartButton.Text = "Start Game";
-            this.StartButton.SetBounds(mainForm.ClientSize.Width / 5, this.MainCanvas.Bottom, (mainForm.ClientSize.Width / 5) * 4, Config.StartButtonHeight);
-            this.StartButton.Click += startCallback;
-            mainForm.Controls.Add(this.StartButton);
+            this.NewButton = new Button();
+            this.NewButton.Text = "New Game";
+            this.NewButton.SetBounds(controlUnit * 3, this.MainCanvas.Bottom, controlUnit * 2, Config.StartButtonHeight);
+            this.NewButton.Click += NewBtnClicked;
+            mainForm.Controls.Add(this.NewButton);
+        }
+
+        private void NewBtnClicked(object sender, EventArgs e)
+        {
+            this.newAction();
+            this.PauseButton.Text = "Pause";
+        }
+
+        private void PauseBtnClicked(object sender, EventArgs e)
+        {
+            if (this.pauseAction()) this.PauseButton.Text = "Resume";
+            else this.PauseButton.Text = "Pause";
         }
 
         public void Resize(Size clientSize)
@@ -52,8 +78,10 @@ namespace Mines.Controls
             this.MainGraphics.Dispose();
             this.MainGraphics = this.MainCanvas.CreateGraphics();
 
-            this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, clientSize.Width / 5, Config.StartButtonHeight);
-            this.StartButton.SetBounds(clientSize.Width / 5, this.MainCanvas.Bottom, (clientSize.Width / 5) * 4, Config.StartButtonHeight);
+            var controlUnit = clientSize.Width / 5;
+            this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, controlUnit, Config.StartButtonHeight);
+            this.PauseButton.SetBounds(controlUnit, this.MainCanvas.Bottom, controlUnit * 2, Config.StartButtonHeight);
+            this.NewButton.SetBounds(controlUnit * 3, this.MainCanvas.Bottom, controlUnit * 2, Config.StartButtonHeight);
         }
 
         public void Update(Image image)

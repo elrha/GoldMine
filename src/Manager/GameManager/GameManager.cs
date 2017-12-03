@@ -17,6 +17,8 @@ namespace Mines.Manager.GameManager
     {
         private bool playFlag;
         private Thread mainThread;
+        private bool pauseState = false;
+        private ManualResetEvent pauseHandle = new ManualResetEvent(true);
         private MainRenderer renderer;
 
         public GameManager(MainRenderer renderer)
@@ -27,6 +29,7 @@ namespace Mines.Manager.GameManager
 
         public void StartGame()
         {
+            this.ForceReleaseGame();
             this.StopGame();
 
             var rand = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
@@ -64,12 +67,28 @@ namespace Mines.Manager.GameManager
             this.renderer.Stop();
         }
 
+        public void ForceReleaseGame()
+        {
+            this.pauseState = false;
+            this.pauseHandle.Set();
+        }
+
+        public bool PauseGame()
+        {
+            this.pauseState ^= true;
+            if (this.pauseState) this.pauseHandle.Reset();
+            else this.pauseHandle.Set();
+            return this.pauseState;
+        }
+
         private void GameProc(object obj)
         {
             var contextContainer = obj as ContextContainer;
 
             while (this.playFlag)
             {
+                this.pauseHandle.WaitOne();
+
                 if (!contextContainer.MainCtx.IsFinish())
                 {
                     var orderedCollection = contextContainer.PlayerCtxList.OrderBy(item => item.Number);
