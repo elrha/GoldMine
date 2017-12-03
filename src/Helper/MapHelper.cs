@@ -23,6 +23,7 @@ namespace Mines.Helper
         //ROCK_5 = 5,
         //ROCK_6 = 6
 
+        private static Random mapIndexGenerator = new Random(DateTime.Now.Second);
         private static int selectedMapIndex = 0;
 
         public static int GetMapCount()
@@ -37,13 +38,17 @@ namespace Mines.Helper
 
         public static BlockType[] CreateField(int col, int row, List<int> startPosition)
         {
+            var targetIndex = MapHelper.selectedMapIndex;
+            if (targetIndex == 0) targetIndex = (MapHelper.mapIndexGenerator.Next(3) + 1);
+            
             BlockType[] result = null;
-            switch (MapHelper.selectedMapIndex)
+            
+            switch (targetIndex)
             {
-                case 1:
+                case 2:
                     result = rectPattern1(col, row);
                     break;
-                case 2:
+                case 3:
                     result = roadPattern1(col, row);
                     break;
                 default:

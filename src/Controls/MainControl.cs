@@ -40,8 +40,9 @@ namespace Mines.Controls
             this.MapSelector = new ComboBox();
             this.MapSelector.DropDownStyle = ComboBoxStyle.DropDownList;
             this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, controlUnit, Config.StartButtonHeight);
-            for(int i = 0; i < MapHelper.GetMapCount(); i++) this.MapSelector.Items.Add(i);
-            if (this.MapSelector.Items.Count > 0) this.MapSelector.SelectedIndex = 0;
+            this.MapSelector.Items.Add("Random");
+            for (int i = 0; i < MapHelper.GetMapCount(); i++) this.MapSelector.Items.Add(i);
+            this.MapSelector.SelectedIndex = 0;
             mainForm.Controls.Add(this.MapSelector);
             this.MapSelector.SelectedIndexChanged += (object sender, EventArgs e) => { MapHelper.SelectMap(this.MapSelector.SelectedIndex); };
             
