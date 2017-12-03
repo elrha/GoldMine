@@ -30,7 +30,7 @@ namespace Mines.Helper
 
         private static void initializeBlockImages()
         {
-            ImageHelper.blockImages = new Image[21];
+            ImageHelper.blockImages = new Image[27];
             ImageHelper.blockImages[0] = ImageHelper.convertColor(Properties.Resources.tool, Color.RoyalBlue);
             ImageHelper.blockImages[1] = ImageHelper.convertColor(Properties.Resources.tool, Color.DarkSeaGreen);
             ImageHelper.blockImages[2] = ImageHelper.convertColor(Properties.Resources.tool, Color.DarkGray);
@@ -47,11 +47,17 @@ namespace Mines.Helper
             ImageHelper.blockImages[13] = Properties.Resources.gem1;
             ImageHelper.blockImages[14] = Properties.Resources.rock_back;
             ImageHelper.blockImages[15] = Properties.Resources.rock1;
-            ImageHelper.blockImages[16] = Properties.Resources.rock2;
-            ImageHelper.blockImages[17] = Properties.Resources.rock3;
-            ImageHelper.blockImages[18] = Properties.Resources.rock4;
-            ImageHelper.blockImages[19] = Properties.Resources.rock5;
-            ImageHelper.blockImages[20] = Properties.Resources.rock6;
+            ImageHelper.blockImages[16] = Properties.Resources.rock1;
+            ImageHelper.blockImages[17] = Properties.Resources.rock2;
+            ImageHelper.blockImages[18] = Properties.Resources.rock2;
+            ImageHelper.blockImages[19] = Properties.Resources.rock3;
+            ImageHelper.blockImages[20] = Properties.Resources.rock3;
+            ImageHelper.blockImages[21] = Properties.Resources.rock4;
+            ImageHelper.blockImages[22] = Properties.Resources.rock4;
+            ImageHelper.blockImages[23] = Properties.Resources.rock5;
+            ImageHelper.blockImages[24] = Properties.Resources.rock5;
+            ImageHelper.blockImages[25] = Properties.Resources.rock6;
+            ImageHelper.blockImages[26] = Properties.Resources.rock6;
         }
 
         private static void initializeAllPlayerImages()

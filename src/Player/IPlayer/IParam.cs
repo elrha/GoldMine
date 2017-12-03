@@ -34,7 +34,13 @@ namespace PlayerInterface
         ROCK_3 = 3,
         ROCK_4 = 4,
         ROCK_5 = 5,
-        ROCK_6 = 6
+        ROCK_6 = 6,
+        ROCK_7 = 7,
+        ROCK_8 = 8,
+        ROCK_9 = 9,
+        ROCK_10 = 10,
+        ROCK_11 = 11,
+        ROCK_12 = 12,
     };
 
     public enum Arrow

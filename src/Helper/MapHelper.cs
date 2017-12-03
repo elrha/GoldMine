@@ -160,7 +160,7 @@ namespace Mines.Helper
                             var targetIndex = (rand.Next(height) + hStart) * col + (rand.Next(width) + wStart);
                             if (readyIndex.Contains(targetIndex)) continue;
 
-                            ret[targetIndex] = (BlockType)rockIndex;
+                            ret[targetIndex] = (BlockType)(rockIndex * (rand.Next(2) + 1));
                             readyIndex.Add(targetIndex);
                             blockCount--;
                         }
