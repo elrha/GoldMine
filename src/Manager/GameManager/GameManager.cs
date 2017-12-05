@@ -36,7 +36,7 @@ namespace Mines.Manager.GameManager
             var startPosition = (new List<int>() { 0, Config.BlockCol - 1, Config.BlockCol * (Config.BlockRow - 1), Config.BlockCol * Config.BlockRow - 1}).OrderBy(item => rand.Next()).ToList();
 
             var contextContainer = new ContextContainer() {
-                MainCtx = new MainContext(Config.BlockCol, Config.BlockRow, MapHelper.CreateField(Config.BlockCol, Config.BlockRow, startPosition)),
+                MainCtx = new MainContext(Config.BlockCol, Config.BlockRow, MapManager.MapManager.Instance.CreateField(Config.BlockCol, Config.BlockRow, startPosition)),
                 PlayerCtxList = renderer.CreatePlayerAsm(Config.BlockCol, Config.BlockRow).Select(item => new PlayerContext()
                 {
                     PlayerAsm = item.Value,

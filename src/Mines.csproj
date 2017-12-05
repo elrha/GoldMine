@@ -76,8 +76,23 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>Packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -95,7 +110,6 @@
     <Compile Include="Controls\PlayerComboBoxItem.cs" />
     <Compile Include="Controls\PlayerControl.cs" />
     <Compile Include="Helper\ImageHelper.cs" />
-    <Compile Include="Helper\MapHelper.cs" />
     <Compile Include="Helper\TickHelper.cs" />
     <Compile Include="Log\Log.cs" />
     <Compile Include="Main.cs">
@@ -107,6 +121,9 @@
     <Compile Include="Manager\GameManager\GameContext.cs" />
     <Compile Include="Manager\GameManager\GameManager.cs" />
     <Compile Include="Defines\Config.cs" />
+    <Compile Include="Manager\MapManager\DefaultMapGenerator.cs" />
+    <Compile Include="Manager\MapManager\ExcelMapLoader.cs" />
+    <Compile Include="Manager\MapManager\MapManager.cs" />
     <Compile Include="Manager\PlayerManager\AssemblyLoader.cs" />
     <Compile Include="Manager\LogManager\LogManager.cs" />
     <Compile Include="Manager\PlayerManager\IAssemblyGenerator.cs" />
@@ -126,6 +143,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

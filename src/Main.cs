@@ -1,6 +1,7 @@
 ﻿using Mines.Controls;
 using Mines.Defines;
 using Mines.Manager.GameManager;
+using Mines.Manager.MapManager;
 using Mines.Renderer;
 using PerseusCommon.Manager.AssemblyManager;
 using PlayerInterface;
@@ -25,6 +26,7 @@ namespace Mines
             InitializeComponent();
 
             Config.Initialize(24, 20);
+            MapManager.Instance.Initialize();
 
             var playerControls = new List<PlayerControl>();
             for (int i = 0; i < Config.PlayerCount; i++)

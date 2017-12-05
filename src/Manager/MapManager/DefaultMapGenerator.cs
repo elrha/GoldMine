@@ -1,81 +1,21 @@
-﻿using Mines.Defines;
-using PlayerInterface;
+﻿using PlayerInterface;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mines.Helper
+namespace Mines.Manager.MapManager
 {
-    class MapHelper
+    class DefaultMapGenerator
     {
-        private static Random mapIndexGenerator = new Random(DateTime.Now.Second);
-        private static int selectedMapIndex = 0;
-
-        public static int GetMapCount()
-        {
-            return 3;
-        }
-
-        public static void SelectMap(int mapIndex)
-        {
-            MapHelper.selectedMapIndex = mapIndex;
-        }
-
-        public static BlockType[] CreateField(int col, int row, List<int> startPosition)
-        {
-            var targetIndex = MapHelper.selectedMapIndex;
-            if (targetIndex == 0) targetIndex = (MapHelper.mapIndexGenerator.Next(3) + 1);
-            
-            BlockType[] result = null;
-            
-            switch (targetIndex)
-            {
-                case 2:
-                    result = rectPattern1(col, row);
-                    break;
-                case 3:
-                    result = roadPattern1(col, row);
-                    break;
-                default:
-                    result = heximalDevision(col, row);
-                    break;
-            }
-
-            foreach (var pos in startPosition)
-                result[pos] = BlockType.NONE;
-            
-            return result;
-        }
-
-        private static BlockType[] random(int col, int row)
-        {
-            var totalCount = col * row;
-            var rand = new Random(DateTime.UtcNow.Millisecond);
-
-            var ret = new BlockType[totalCount];
-            for (int i = 0; i < totalCount; i++)
-            {
-                var blockType = (rand.Next() % 12) - Config.BlockGemCount;
-
-                if (blockType == 0) blockType = 1;
-                if (blockType == -4) blockType = -1;
-
-                ret[i] = (BlockType)blockType;
-            }
-
-            return ret;
-        }
-
-        private static BlockType[] heximalDevision(int col, int row)
+        public static BlockType[] HeximalDevision(int col, int row)
         {
             var totalCount = col * row;
             var ret = new BlockType[totalCount];
             var readyIndex = new HashSet<int>();
             var rand = new Random(DateTime.UtcNow.Millisecond);
-            
+
             for (int i = 0; i < totalCount; i++)
                 ret[i] = BlockType.ROCK_1;
 
@@ -93,7 +33,7 @@ namespace Mines.Helper
                 ret[targetIndex] = BlockType.ITEM_7;
                 readyIndex.Add(targetIndex);
             }
-            
+
             for (int h = 0; h < 4; h++)
             {
                 for (int w = 0; w < 4; w++)
@@ -145,7 +85,7 @@ namespace Mines.Helper
                         blockCount--;
                     }
 
-                    for (int rockIndex = 6; rockIndex-- > 0; )
+                    for (int rockIndex = 6; rockIndex-- > 0;)
                     {
                         blockCount = (width * height) / 10;
                         while (blockCount > 0)
@@ -164,7 +104,7 @@ namespace Mines.Helper
             return ret;
         }
 
-        private static BlockType[] rectPattern1(int col, int row)
+        public static BlockType[] RectPattern1(int col, int row)
         {
             var totalCount = col * row;
             var ret = new BlockType[totalCount];
@@ -187,7 +127,7 @@ namespace Mines.Helper
                     readyIndex.Add(h * col + (col - (wCurrent + 1)));
                 }
 
-                hCurrent+=2;
+                hCurrent += 2;
 
                 for (int w = wCurrent; w < col - wCurrent; w++)
                 {
@@ -212,7 +152,7 @@ namespace Mines.Helper
                             if (!readyIndex.Contains(targetIndex)) readyIndex.Add(targetIndex);
                         }
                     }
-                    
+
                     break;
                 }
             }
@@ -313,7 +253,7 @@ namespace Mines.Helper
             return ret;
         }
 
-        private static BlockType[] roadPattern1(int col, int row)
+        public static BlockType[] RoadPattern1(int col, int row)
         {
             var totalCount = col * row;
             var ret = new BlockType[totalCount];
@@ -374,7 +314,7 @@ namespace Mines.Helper
 
                 togleFlag = togleFlag ? false : true;
             }
-            
+
             int width = col / 4;
             int height = row / 4;
 

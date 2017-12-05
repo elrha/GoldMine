@@ -1,6 +1,7 @@
 ﻿using Mines.Defines;
 using Mines.Helper;
 using Mines.Manager.GameManager;
+using Mines.Manager.MapManager;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -40,12 +41,13 @@ namespace Mines.Controls
             this.MapSelector = new ComboBox();
             this.MapSelector.DropDownStyle = ComboBoxStyle.DropDownList;
             this.MapSelector.SetBounds(0, this.MainCanvas.Bottom, controlUnit, Config.StartButtonHeight);
-            this.MapSelector.Items.Add("Random");
-            for (int i = 0; i < MapHelper.GetMapCount(); i++) this.MapSelector.Items.Add(i);
+            foreach (var mapName in MapManager.Instance.GetMapNameList())
+                this.MapSelector.Items.Add(mapName);
             this.MapSelector.SelectedIndex = 0;
+            MapManager.Instance.SelectMap(this.MapSelector.SelectedItem.ToString());
+            this.MapSelector.SelectedIndexChanged += (object sender, EventArgs e) => { MapManager.Instance.SelectMap(this.MapSelector.SelectedItem.ToString()); };
             mainForm.Controls.Add(this.MapSelector);
-            this.MapSelector.SelectedIndexChanged += (object sender, EventArgs e) => { MapHelper.SelectMap(this.MapSelector.SelectedIndex); };
-            
+
             this.PauseButton = new Button();
             this.PauseButton.Text = "Pause";
             this.PauseButton.SetBounds(controlUnit, this.MainCanvas.Bottom, controlUnit * 2, Config.StartButtonHeight);
