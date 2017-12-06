@@ -1,6 +1,6 @@
 **알고리즘 대회 개요**
 
-![](https://github.com/elrha/GoldMine/blob/master/doc/poster_02.jpg?raw=true)
+![](https://github.com/elrha/GoldMine/blob/master/doc/poster_03.jpg?raw=true)
 
 **게임 규칙**
 
@@ -23,7 +23,7 @@
 
 장애물
 
--   장애물은 1부터 6까지의 내구성을 가지고 있습니다.
+-   장애물은 **1부터 12**까지의 내구성을 가지고 있습니다.
 
 -   장애물의 내구성이 0 이하가 되면 제거됩니다.
 
